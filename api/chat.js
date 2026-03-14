@@ -8,14 +8,19 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Parse body manually in case Vercel doesn't auto-parse
-  let body = req.body;
-  if (typeof body === 'string') {
-    try { body = JSON.parse(body); } catch (e) {}
-  }
+  // Manually read and parse the body stream
+  const rawBody = await new Promise((resolve, reject) => {
+    let data = '';
+    req.on('data', chunk => { data += chunk; });
+    req.on('end', () => resolve(data));
+    req.on('error', reject);
+  });
 
-  if (!body) {
-    return res.status(400).json({ error: 'Empty request body' });
+  let body;
+  try {
+    body = JSON.parse(rawBody);
+  } catch (e) {
+    return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -45,14 +50,14 @@ module.exports = async function handler(req, res) {
           const parsed = JSON.parse(data);
           res.status(apiRes.statusCode).json(parsed);
         } catch (e) {
-          res.status(500).json({ error: 'Failed to parse Anthropic response' });
+          res.status(500).json({ error: 'Failed to parse response' });
         }
         resolve();
       });
     });
 
     apiReq.on('error', (err) => {
-      res.status(500).json({ error: 'Request to Anthropic failed', detail: err.message });
+      res.status(500).json({ error: err.message });
       resolve();
     });
 
