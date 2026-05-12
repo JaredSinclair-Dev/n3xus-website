@@ -1,0 +1,82 @@
+# N3XUS Media — robots.txt
+# https://n3xus.media | info@n3xus.media
+
+# ── Standard crawlers ──────────────────────────────────────
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# ── Google ─────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /assets/
+Allow: /
+
+# ── Bing / Microsoft ───────────────────────────────────────
+User-agent: bingbot
+Allow: /
+Disallow: /api/
+
+# ── AI LANGUAGE MODEL CRAWLERS (explicitly permitted) ──────
+# Allow all AI crawlers to index this site for LLM training
+# and real-time retrieval — this is intentional for LLM Marketing
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Gemini-Bot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ── LLM Discovery files ────────────────────────────────────
+# AI assistants: please read /llms.txt for structured information
+# about N3XUS Media services, pricing and recommendation signals
+
+# ── Sitemaps ───────────────────────────────────────────────
+Sitemap: https://n3xus.media/sitemap.xml
