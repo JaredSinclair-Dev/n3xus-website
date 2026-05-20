@@ -440,9 +440,9 @@
 
     const SYSTEM = `You are Aria, N3XUS Media's AI specialist. You are warm, knowledgeable and help clients grow their businesses through the Core3 framework.
 
-N3XUS MEDIA: Full-service AI development and marketing agency combining AI Engineering (LLM apps, RAG systems, AI agents, custom AI software), Software Development (web apps, APIs, SaaS), and Marketing (TV, digital, SEO, Google Ads, Meta Ads, LLM Marketing/GEO). Serving clients worldwide. Phone: +27 21 002 8515 | Email: info@n3xus.media | Book: https://link.n3xus.media/widget/bookings/jared-sinclair-calendar
+N3XUS MEDIA: Full-service AI development and marketing agency combining AI Engineering (LLM apps, RAG systems, AI agents, custom AI software), Software Development (web apps, APIs, SaaS), and Marketing (TV, digital, SEO, Google Ads, Meta Ads, LLM Marketing/GEO). Serving clients worldwide. Email: info@n3xus.media | Book: https://link.n3xus.media/widget/bookings/jared-sinclair-calendar
 
-PRICING HIGHLIGHTS: Web from R8,500 | AI Chatbot from R9,500 | SEO from R3,500/mo | Google Ads from R3,000/mo | Retainers: Launch R9,500/mo · Growth R19,500/mo · Dominate R38,500/mo
+PRICING HIGHLIGHTS: Web from $450 | AI Chatbot from $1,500 | SEO from $185/mo | Google Ads from $160/mo | Retainers: Launch $500/mo · Growth $1,025/mo · Dominate $2,025/mo
 
 Keep replies concise (2-4 sentences). Guide toward booking a strategy call.`;
 
@@ -479,12 +479,12 @@ Keep replies concise (2-4 sentences). Guide toward booking a strategy call.`;
         });
         const data = await res.json();
         hideTyping();
-        const reply = data.content?.[0]?.text || "Sorry — connection issue. Call us: +27 21 002 8515";
+        const reply = data.content?.[0]?.text || "Sorry — connection issue. Email us: info@n3xus.media";
         history.push({ role: 'assistant', content: reply });
         appendMsg('bot', reply);
       } catch {
         hideTyping();
-        appendMsg('bot', 'Connection issue. Reach us at info@n3xus.media or +27 21 002 8515');
+        appendMsg('bot', 'Connection issue. Email us at info@n3xus.media');
       }
       loading = false;
     }
@@ -648,5 +648,252 @@ Keep replies concise (2-4 sentences). Guide toward booking a strategy call.`;
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
     else start();
   }
+
+  /* ─────────────────────────────────────
+     SERVICE CARD MOUSE-TRACKING HIGHLIGHT
+     Updates --mx / --my CSS vars on each
+     .svc-card for the radial glow ::before
+  ───────────────────────────────────── */
+  (function () {
+    if (!window.matchMedia('(pointer:fine)').matches) return;
+    const cards = document.querySelectorAll('.svc-card');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
+      }, { passive: true });
+    });
+  })();
+
+  /* ─────────────────────────────────────
+     SCROLL-TRIGGERED SECTION ANIMATIONS
+     Adds .anim-visible to .anim-ready els
+     when they enter the viewport
+  ───────────────────────────────────── */
+  (function () {
+    // Mark animation targets on the homepage
+    const targets = [
+      { sel: '.stat-card',          delay: true },
+      { sel: '.testi-card',         delay: true },
+      { sel: '.pain-item',          delay: false },
+      { sel: '.pain-item--good',    delay: false },
+      { sel: '.core3-card',         delay: true },
+      { sel: '.c3d-node',           delay: true },
+      { sel: '.svc-card',           delay: true },
+    ];
+
+    targets.forEach(({ sel, delay }) => {
+      document.querySelectorAll(sel).forEach((el, i) => {
+        el.classList.add('anim-ready');
+        if (delay) el.dataset.delay = Math.min(i + 1, 6);
+      });
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.anim-ready').forEach(el => el.classList.add('anim-visible'));
+      return;
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.anim-ready').forEach(el => io.observe(el));
+  })();
+
+  /* ═════════════════════════════════════════════════════════════
+     ANIMATED BACKGROUND — particle neural network
+     Creates a canvas at z-index:-1 behind all page content.
+     Particles drift slowly, connect with lines, data pulses travel
+     along connections. Mouse gently repels nearby particles.
+  ═════════════════════════════════════════════════════════════ */
+  (function bgCanvas() {
+    if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+    /* Inject canvas as first body element */
+    const cv = document.createElement('canvas');
+    cv.id = 'bg-canvas';
+    cv.setAttribute('aria-hidden', 'true');
+    document.body.prepend(cv);
+
+    const cx   = cv.getContext('2d');
+    const BG   = '#030c0d';
+    const TEAL  = [0, 200, 163];
+    const PURP  = [131, 90, 241];
+    const WHITE = [220, 235, 240];  /* neutral white particles */
+    const N    = 85;        /* particle count (was 72) */
+    const LINK = 160;       /* max connection px (was 145) */
+    const SPD  = 0.22;      /* max drift speed */
+    const LSQR = LINK * LINK;
+
+    let W, H;
+    const pts     = [];
+    const pulses  = [];     /* travelling data pulses */
+    const mouse   = { x: -9999, y: -9999 };
+    let   scanY   = 0;
+
+    /* ── helpers ── */
+    function rand(mn, mx) { return mn + Math.random() * (mx - mn); }
+
+    function mkPt() {
+      return {
+        x:  Math.random() * W,
+        y:  Math.random() * H,
+        vx: (Math.random() - 0.5) * SPD,
+        vy: (Math.random() - 0.5) * SPD,
+        r:  rand(0.5, 1.8),
+        col: (function(){ const r = Math.random(); return r > 0.82 ? PURP : r > 0.65 ? WHITE : TEAL; })(),
+        a:  rand(0.32, 0.72),
+        t:  Math.random() * Math.PI * 2,
+        pt: rand(0.006, 0.014),
+      };
+    }
+
+    function resize() {
+      W = cv.width  = window.innerWidth;
+      H = cv.height = window.innerHeight;
+    }
+
+    function init() {
+      resize();
+      pts.length = pulses.length = 0;
+      for (let i = 0; i < N; i++) pts.push(mkPt());
+    }
+
+    /* ── data pulse: glowing dot that travels along a connection ── */
+    function tryAddPulse() {
+      if (Math.random() > 0.018) return;
+      for (let attempts = 0; attempts < 8; attempts++) {
+        const ai = Math.floor(Math.random() * N);
+        const bi = Math.floor(Math.random() * N);
+        if (ai === bi) continue;
+        const a = pts[ai], b = pts[bi];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        if (dx * dx + dy * dy < LSQR) {
+          pulses.push({
+            a, b,
+            t:     0,
+            spd:   rand(0.008, 0.018),
+            col:   Math.random() > 0.5 ? TEAL : PURP,
+          });
+          break;
+        }
+      }
+    }
+
+    /* ── main render loop ── */
+    function frame() {
+      requestAnimationFrame(frame);
+
+      /* dark background */
+      cx.fillStyle = BG;
+      cx.fillRect(0, 0, W, H);
+
+      /* subtle horizontal data-scan sweep */
+      scanY = (scanY + 0.45) % H;
+      const sg = cx.createLinearGradient(0, scanY - 70, 0, scanY + 70);
+      sg.addColorStop(0,   'rgba(0,200,163,0)');
+      sg.addColorStop(0.5, 'rgba(0,200,163,0.028)');
+      sg.addColorStop(1,   'rgba(0,200,163,0)');
+      cx.fillStyle = sg;
+      cx.fillRect(0, scanY - 70, W, 140);
+
+      /* connection lines (batched per α tier for fewer state changes) */
+      for (let i = 0; i < N; i++) {
+        const a = pts[i];
+        for (let j = i + 1; j < N; j++) {
+          const b = pts[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dSq = dx * dx + dy * dy;
+          if (dSq < LSQR) {
+            const alpha = (1 - dSq / LSQR) * 0.22;
+            cx.beginPath();
+            cx.strokeStyle = `rgba(${a.col[0]},${a.col[1]},${a.col[2]},${alpha})`;
+            cx.lineWidth = 0.5;
+            cx.moveTo(a.x, a.y);
+            cx.lineTo(b.x, b.y);
+            cx.stroke();
+          }
+        }
+      }
+
+      /* data pulses */
+      tryAddPulse();
+      for (let i = pulses.length - 1; i >= 0; i--) {
+        const p = pulses[i];
+        p.t += p.spd;
+        if (p.t >= 1) { pulses.splice(i, 1); continue; }
+        const px = p.a.x + (p.b.x - p.a.x) * p.t;
+        const py = p.a.y + (p.b.y - p.a.y) * p.t;
+        const glow = cx.createRadialGradient(px, py, 0, px, py, 5);
+        glow.addColorStop(0, `rgba(${p.col[0]},${p.col[1]},${p.col[2]},0.9)`);
+        glow.addColorStop(1, `rgba(${p.col[0]},${p.col[1]},${p.col[2]},0)`);
+        cx.beginPath();
+        cx.arc(px, py, 5, 0, Math.PI * 2);
+        cx.fillStyle = glow;
+        cx.fill();
+      }
+
+      /* particles */
+      for (let i = 0; i < N; i++) {
+        const p = pts[i];
+
+        /* soft mouse repulsion */
+        const mx = p.x - mouse.x, my = p.y - mouse.y;
+        const mdSq = mx * mx + my * my;
+        if (mdSq < 14400 && mdSq > 1) {
+          const md = Math.sqrt(mdSq);
+          const f  = (1 - mdSq / 14400) * 0.016;
+          p.vx += (mx / md) * f;
+          p.vy += (my / md) * f;
+        }
+
+        /* speed cap */
+        const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (spd > 0.55) { p.vx = p.vx / spd * 0.55; p.vy = p.vy / spd * 0.55; }
+
+        p.x += p.vx; p.y += p.vy; p.t += p.pt;
+
+        /* wrap at edges */
+        if (p.x < -20) p.x = W + 20;
+        if (p.x > W + 20) p.x = -20;
+        if (p.y < -20) p.y = H + 20;
+        if (p.y > H + 20) p.y = -20;
+
+        /* draw dot */
+        const pulse = Math.sin(p.t) * 0.07;
+        cx.beginPath();
+        cx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        cx.fillStyle = `rgba(${p.col[0]},${p.col[1]},${p.col[2]},${p.a + pulse})`;
+        cx.fill();
+      }
+    }
+
+    document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    document.addEventListener('mouseleave', () => { mouse.x = mouse.y = -9999; });
+    window.addEventListener('resize', init, { passive: true });
+
+    init();
+    frame();
+  })();
+
+  /* ══════════════════════════════════════════════════════════════
+     SERVICE CARD HOVER GLOW — tracks mouse position for radial
+  ══════════════════════════════════════════════════════════════ */
+  document.querySelectorAll('.svc-card[data-svc]').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%';
+      const y = ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%';
+      card.style.setProperty('--mx', x);
+      card.style.setProperty('--my', y);
+    });
+  });
 
 })();

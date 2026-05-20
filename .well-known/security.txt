@@ -1,0 +1,5 @@
+Contact: mailto:info@n3xus.media
+Contact: https://n3xus.media/contact
+Preferred-Languages: en
+Canonical: https://n3xus.media/.well-known/security.txt
+Policy: https://n3xus.media/privacy

@@ -8,11 +8,10 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://n3xus.media/"/>
-    <xhtml:link rel="alternate" hreflang="en-ZA" href="https://n3xus.media/"/>
     <image:image>
       <image:loc>https://n3xus.media/assets/og-image.png</image:loc>
-      <image:title>N3XUS Media — Full-Service Marketing Agency Cape Town</image:title>
-      <image:caption>Cape Town's only agency combining TV marketing, digital marketing and AI automation under one roof</image:caption>
+      <image:title>N3XUS Media — Full-Service Global Marketing &amp; AI Agency</image:title>
+      <image:caption>The only agency combining TV marketing, digital marketing and AI automation under one global roof</image:caption>
     </image:image>
   </url>
   <url>
@@ -68,5 +67,17 @@
     <lastmod>2026-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://n3xus.media/privacy</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+  <url>
+    <loc>https://n3xus.media/terms</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
   </url>
 </urlset>

@@ -1,16 +1,12 @@
 ﻿<!DOCTYPE html>
-<html lang="en-ZA">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="N3XUS Media">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <meta name="geo.region" content="ZA-WC">
-  <meta name="geo.placename" content="Cape Town, Western Cape, South Africa">
-  <meta name="geo.position" content="-33.9249;18.4241">
-  <meta name="ICBM" content="-33.9249, 18.4241">
   <meta name="llms-txt" content="https://n3xus.media/llms.txt">
-  <title>N3XUS Intelligence</title>
+  <title>N3XUS Intelligence &mdash; N3XUS Media</title>
   <meta name="description" content="N3XUS Intelligence is a proprietary AI marketing platform giving clients unified visibility across TV, digital, and AI channels. Live dashboards, automated reports, AI recommendations.">
   <link rel="canonical" href="https://n3xus.media/intelligence">
   <meta property="og:type"        content="website">
@@ -38,6 +34,113 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="preload" href="/assets/styles.css" as="style">
   <link rel="preload" href="/assets/script.js" as="script">
+  <style>
+    /* ── Intelligence hero split layout ── */
+    .intel-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    /* ── Live dashboard mock ── */
+    .intel-dash-wrap {
+      background: var(--surface);
+      border: 1px solid var(--bdr2);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.45), 0 0 40px rgba(0,200,163,0.07);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.45s;
+    }
+    .intel-dash-wrap:hover { transform: perspective(1000px) rotateY(0) rotateX(0); }
+    .idash-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--bdr);
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--white3);
+    }
+    .idash-live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px var(--accent);
+      animation: idashLive 1.5s infinite;
+    }
+    @keyframes idashLive { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .idash-right { margin-left: auto; color: var(--white4); font-size: 9px; }
+    .idash-body {
+      display: grid; grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 8px; padding: 10px; min-height: 0;
+    }
+    .idash-panel {
+      background: var(--bg2); border: 1px solid var(--bdr);
+      border-radius: 8px; padding: 8px 10px;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .idash-ptitle {
+      font-family: var(--font-mono); font-size: 8px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--white4);
+    }
+    .idash-kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .idash-kpi {
+      padding: 7px 8px; background: var(--surface);
+      border-radius: 6px; border: 1px solid var(--bdr);
+    }
+    .idash-kpi .idv {
+      font-size: 17px; font-weight: 600; letter-spacing: -0.02em; color: var(--white);
+    }
+    .idash-kpi.idup .idv { color: var(--accent); }
+    .idash-kpi.iddown .idv { color: rgba(0,200,163,0.7); }
+    .idash-kpi .idl {
+      font-family: var(--font-mono); font-size: 7px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--white4); margin-top: 1px;
+    }
+    .idash-chart { flex: 1; min-height: 80px; position: relative; }
+    .idash-chart svg { width: 100%; height: 100%; }
+    .idash-channels { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+    .idash-ch {
+      display: grid; grid-template-columns: 50px 1fr 28px;
+      align-items: center; gap: 6px; font-size: 9px;
+    }
+    .idash-ch .icnm { color: var(--white2); font-family: var(--font-mono); font-size: 8px; }
+    .idash-ch .icbar {
+      height: 5px; background: var(--surface); border-radius: 3px;
+      overflow: hidden; position: relative;
+    }
+    .idash-ch .icbar::after {
+      content: ""; position: absolute; inset: 0;
+      background: var(--accent); opacity: 0.75;
+      transform: scaleX(0); transform-origin: left;
+      animation: idashBar 1.4s var(--ease-out) forwards;
+    }
+    .idash-ch:nth-child(1) .icbar::after { animation-delay: 0.3s; }
+    .idash-ch:nth-child(2) .icbar::after { animation-delay: 0.45s; opacity: 1; }
+    .idash-ch:nth-child(3) .icbar::after { animation-delay: 0.6s; }
+    .idash-ch:nth-child(4) .icbar::after { animation-delay: 0.75s; opacity: 0.85; }
+    .idash-ch:nth-child(5) .icbar::after { animation-delay: 0.9s; opacity: 0.6; }
+    @keyframes idashBar { to { transform: scaleX(var(--w, 1)); } }
+    .idash-ch .icpct { color: var(--white4); font-size: 8px; font-family: var(--font-mono); text-align: right; }
+    .idash-feed { display: flex; flex-direction: column; gap: 4px; overflow: hidden; flex: 1; }
+    .idash-item {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 7px; background: var(--surface);
+      border-radius: 5px; border-left: 2px solid var(--accent);
+      font-size: 9px; color: var(--white2);
+      opacity: 0; transform: translateX(-8px);
+      animation: idashItem 0.35s var(--ease-out) forwards;
+    }
+    @keyframes idashItem { to { opacity: 1; transform: translateX(0); } }
+    .idash-item .isrc {
+      font-family: var(--font-mono); font-size: 7px;
+      color: var(--accent); letter-spacing: 0.1em;
+      margin-left: auto; text-transform: uppercase;
+    }
+    /* Mobile: stack hero columns */
+    @media (max-width: 900px) {
+      .intel-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .intel-dash-wrap { transform: none; max-width: 560px; margin: 0 auto; }
+    }
+  </style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -49,7 +152,7 @@
     <a href="/" class="nav-brand" aria-label="N3XUS Media Home"><img src="/assets/n3xus-logo.svg" alt="N3XUS Media" class="nav-logo" width="340" height="88" fetchpriority="high"></a>
     <ul class="nav-links" id="navLinks" role="list">
       <li class="nav-item has-dropdown">
-        <a href="#" class="nav-link" aria-expanded="false" aria-haspopup="true">Services <span class="nav-arrow" aria-hidden="true">&#9660;</span></a>
+        <a href="#" class="nav-link" aria-expanded="false" aria-haspopup="true">Services <svg class="nav-arrow" aria-hidden="true" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg></a>
         <div class="nav-dropdown" role="menu">
           <a href="/services/brand" role="menuitem"><span class="dd-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/></svg></span><span><strong>Brand &amp; Market Presence</strong><small>TV, Activations, Sponsorship</small></span></a>
           <a href="/services/digital" role="menuitem"><span class="dd-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span><span><strong>Digital Growth &amp; Performance</strong><small>SEO, Ads, Social, Web Dev</small></span></a>
@@ -70,13 +173,74 @@
 
 <section id="main" class="page-hero" aria-labelledby="ph-title">
   <div class="container">
-    <nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-hidden="true">/</li><li aria-current="page">N3XUS Intelligence</li></ol></nav>
-    <div class="ph-tag reveal"><span class="section-tag">Proprietary Platform</span></div>
-    <h1 id="ph-title" class="reveal">N3XUS Intelligence</h1>
-    <p class="ph-desc reveal">Your AI marketing command centre. One unified dashboard connecting every channel &#8212; TV reach, digital conversions, social performance, AI interactions &#8212; with live recommendations that make every rand work harder.</p>
-    <div class="hero-actions reveal">
-      <a href="https://link.n3xus.media/widget/bookings/jared-sinclair-calendar" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Request a Demo</a>
-      <a href="https://app.n3xus.media" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">Client Login</a>
+    <div class="intel-hero-grid">
+      <!-- Left: copy -->
+      <div class="intel-hero-copy">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-hidden="true">/</li><li aria-current="page">N3XUS Intelligence</li></ol></nav>
+        <div class="ph-tag reveal"><span class="section-tag">Proprietary Platform</span></div>
+        <h1 id="ph-title" class="reveal">N3XUS Intelligence</h1>
+        <p class="ph-desc reveal">Your AI marketing command centre. One unified dashboard connecting every channel &#8212; TV reach, digital conversions, social performance, AI interactions &#8212; with live recommendations that make every rand work harder.</p>
+        <div class="hero-actions reveal">
+          <a href="https://link.n3xus.media/widget/bookings/jared-sinclair-calendar" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Request a Demo</a>
+          <a href="https://app.n3xus.media" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">Client Login</a>
+        </div>
+      </div>
+      <!-- Right: live dashboard animation -->
+      <div class="intel-dash-wrap reveal" aria-hidden="true">
+        <div class="idash-head">
+          <span class="idash-live-dot"></span>
+          <span>N3XUS Intelligence &mdash; Live</span>
+          <span class="idash-right">Updated just now</span>
+        </div>
+        <div class="idash-body">
+          <!-- KPIs + channels -->
+          <div class="idash-panel">
+            <div class="idash-ptitle">Performance &middot; 30d</div>
+            <div class="idash-kpi-row">
+              <div class="idash-kpi idup"><div class="idv">+47%</div><div class="idl">Qualified Leads</div></div>
+              <div class="idash-kpi iddown"><div class="idv">&minus;31%</div><div class="idl">Cost / Lead</div></div>
+              <div class="idash-kpi idup"><div class="idv">+63%</div><div class="idl">Brand Recall</div></div>
+              <div class="idash-kpi idup"><div class="idv">92%</div><div class="idl">Retention</div></div>
+            </div>
+            <div class="idash-ptitle" style="margin-top:6px">Channels</div>
+            <div class="idash-channels">
+              <div class="idash-ch"><span class="icnm">TV/SABC</span><div class="icbar" style="--w:0.78"></div><span class="icpct">78</span></div>
+              <div class="idash-ch"><span class="icnm">SEO</span><div class="icbar" style="--w:0.92"></div><span class="icpct">92</span></div>
+              <div class="idash-ch"><span class="icnm">G. Ads</span><div class="icbar" style="--w:0.66"></div><span class="icpct">66</span></div>
+              <div class="idash-ch"><span class="icnm">Meta</span><div class="icbar" style="--w:0.71"></div><span class="icpct">71</span></div>
+              <div class="idash-ch"><span class="icnm">LLM/GEO</span><div class="icbar" style="--w:0.55"></div><span class="icpct">55</span></div>
+            </div>
+          </div>
+          <!-- Live chart -->
+          <div class="idash-panel">
+            <div class="idash-ptitle">Lead Velocity</div>
+            <div class="idash-chart">
+              <svg viewBox="0 0 300 120" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="idash-grad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#00C8A3" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#00C8A3" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="30" x2="300" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="60" x2="300" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="90" x2="300" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <path id="idash-area" fill="url(#idash-grad)" opacity="0.6" d=""/>
+                <path id="idash-line" fill="none" stroke="#00C8A3" stroke-width="1.5" d=""/>
+                <circle id="idash-tip" fill="#00C8A3" filter="drop-shadow(0 0 5px #00C8A3)" cx="0" cy="0" r="3"/>
+              </svg>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--white4);letter-spacing:0.1em">
+              <span>30d ago</span><span style="color:var(--accent)">+47% trending up</span><span>now</span>
+            </div>
+          </div>
+          <!-- Leads feed -->
+          <div class="idash-panel">
+            <div class="idash-ptitle">Incoming Leads</div>
+            <div class="idash-feed" id="idashFeed"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -186,7 +350,7 @@
       <h2>Request a N3XUS Intelligence Demo</h2>
       <p>See exactly what your marketing data looks like in a live dashboard. Book a 30-minute demo and we&#39;ll show you using real-world examples.</p>
       <a href="https://link.n3xus.media/widget/bookings/jared-sinclair-calendar" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Book Demo &rarr;</a>
-      <div class="cta-sub"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cta-sub-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.79a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +27 21 002 8515</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cta-sub-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> info@n3xus.media</span><span><a href="https://app.n3xus.media" style="color:inherit" target="_blank" rel="noopener">app.n3xus.media</a></span></div>
+      <div class="cta-sub"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cta-sub-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> info@n3xus.media</span><span><a href="https://app.n3xus.media" style="color:inherit" target="_blank" rel="noopener">app.n3xus.media</a></span></div>
     </div>
   </div>
 </section>
@@ -199,7 +363,7 @@
       <div class="footer-col"><h4>Platform</h4><ul><li><a href="/intelligence">Platform Overview</a></li><li><a href="https://app.n3xus.media" rel="noopener" target="_blank">Client Login</a></li><li><a href="https://link.n3xus.media/widget/bookings/jared-sinclair-calendar" rel="noopener" target="_blank">Request Demo</a></li></ul></div>
       <div class="footer-col"><h4>Company</h4><ul><li><a href="/about">About N3XUS</a></li><li><a href="/contact">Contact</a></li><li><a href="/blog">Blog</a></li><li><a href="https://link.n3xus.media/widget/bookings/jared-sinclair-calendar" rel="noopener" target="_blank">Book Call</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>&copy; 2025 N3XUS Media (Pty) Ltd. All rights reserved.</p><p><a href="/privacy">Privacy Policy</a> &bull; <a href="/sitemap.xml">Sitemap</a></p></div>
+    <div class="footer-bottom"><p>&copy; 2026 N3XUS Media (Pty) Ltd. All rights reserved.</p><p><a href="/privacy">Privacy Policy</a> &bull; <a href="/terms">Terms of Service</a> &bull; <a href="/sitemap.xml">Sitemap</a></p></div>
   </div>
 </footer>
 <div id="chat-widget" aria-label="N3XUS AI Assistant" role="complementary">
@@ -211,5 +375,62 @@
   </div>
 </div>
 <script src="/assets/script.js" defer></script>
+<script>
+/* ── Intelligence dashboard live animation ── */
+(function() {
+  const N = 40;
+  let data = [];
+  for (let i = 0; i < N; i++) data.push(35 + Math.random() * 28 + i * 0.55);
+
+  const lineEl = document.getElementById('idash-line');
+  const areaEl = document.getElementById('idash-area');
+  const tipEl  = document.getElementById('idash-tip');
+  if (!lineEl) return;
+
+  function drawChart() {
+    const pts = data.map((v, i) => [(i / (N - 1)) * 300, 120 - v]);
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 1; i < pts.length; i++) {
+      const [x1, y1] = pts[i - 1], [x2, y2] = pts[i];
+      const mx = (x1 + x2) / 2;
+      d += ` Q ${x1} ${y1} ${mx} ${(y1 + y2) / 2} T ${x2} ${y2}`;
+    }
+    lineEl.setAttribute('d', d);
+    areaEl.setAttribute('d', d + ' L 300 120 L 0 120 Z');
+    tipEl.setAttribute('cx', pts[pts.length - 1][0]);
+    tipEl.setAttribute('cy', pts[pts.length - 1][1]);
+  }
+  drawChart();
+  setInterval(function() {
+    data.shift();
+    const prev = data[data.length - 1];
+    data.push(Math.max(18, Math.min(100, prev + (Math.random() - 0.4) * 7)));
+    drawChart();
+  }, 700);
+
+  const sources = [
+    { name: 'Sarah K. · Retail brand', src: 'SABC2' },
+    { name: 'Marcus D. · Fintech', src: 'GOOGLE' },
+    { name: 'Priya R. · SaaS demo', src: 'CHATGPT' },
+    { name: 'Johan L. · Enterprise', src: 'LINKEDIN' },
+    { name: 'Anika M. · Quote req', src: 'CHATBOT' },
+    { name: 'Thabo S. · Strategy call', src: 'DSTV' },
+    { name: 'Lebo N. · Audit', src: 'META' },
+    { name: 'Devon P. · Pricing', src: 'CLAUDE' },
+  ];
+  const feed = document.getElementById('idashFeed');
+  let fi = 0;
+  function addLead() {
+    const s = sources[fi++ % sources.length];
+    const item = document.createElement('div');
+    item.className = 'idash-item';
+    item.innerHTML = '<span>' + s.name + '</span><span class="isrc">' + s.src + '</span>';
+    feed.insertBefore(item, feed.firstChild);
+    while (feed.children.length > 5) feed.removeChild(feed.lastChild);
+  }
+  for (let i = 0; i < 4; i++) addLead();
+  setInterval(addLead, 2000);
+})();
+</script>
 </body>
 </html>
